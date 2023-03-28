@@ -35,15 +35,25 @@ if [ $(/opt/cycle/jetpack/bin/jetpack config slurm.hpc) == "True" ]; then
   cat /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   chown $SLURM_JOB_USER:$SLURM_JOB_USER /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   chmod 644 /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
+  nodescnt=$(wc -l /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID)
+
+  echo "Node cnt = "$nodecnt
 
   # Start Beeond as root
-  echo "Now starting beeond ... "
-  echo /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
-  /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
+  if [ $nodecnt > 1 ]; then
+    echo "Now starting beeond ... "
+    echo /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
+    /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
+  else
+    echo "Single node so not starting beeond but please use local /mnt/resource dir for scratch"
+    ln -s /mnt/resource/beeond /beeond
+  fi
+
 else
   echo "Skipping Beeond start since this is not an HPC partition..."
 fi
 
-echo "Is Beeond mounted ?"
+echo "Is Beeond mounted, on how many nodes ?"
 /usr/bin/df -h /beeond
+
 echo "This is the end, Thank you."

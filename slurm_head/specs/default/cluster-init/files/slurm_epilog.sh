@@ -16,8 +16,10 @@ echo "JobUser    = "$SLURM_JOB_USER
 
 if [ "$(/opt/cycle/jetpack/bin/jetpack config slurm.hpc)" == "True" ]; then
   nodefile=/shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
+  nodecnt=$(wc -l $nodefile)
+
   echo $nodefile
-  if [ -e $nodefile ] ; then
+  if [ -e $nodefile && $nodecnt > 1] ; then
     echo "$(date).... Stopping beeond"
     while read host; do
       echo /usr/bin/beeond stop -b /usr/bin/pdsh -n $nodefile -L -d -P -c
@@ -35,5 +37,8 @@ if [ "$(/opt/cycle/jetpack/bin/jetpack config slurm.hpc)" == "True" ]; then
 
     rm $nodefile
     echo "ok done"
+  else
+    echo "Single node job, so unlinking /beeond directory"
+    unlink /beeond
   fi
 fi
