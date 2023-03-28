@@ -5,7 +5,8 @@ In short:
 - it creates a RAID0 target out of the 2 x NVMe-SSD drives present on our of HBv3 node;
 - it configures / compiles BeeGFS on the HBv3 nodes;
 - it configures slurm with pro and epilog scripts;
-- it mounts BeeOnd on HBv3 nodes across the selected nodes for your job to run on local parallel filesystem.
+- it mounts BeeOnd on HBv3 nodes across the selected nodes for your job to run on local parallel filesystem;
+- it supports single node job case where we don't build beeond, but instead leverage local NVMe-SSD.
 
 Note: This has been tested on CycleCloud 8.3, AlmaLinux-HPC-8.6 and HBv3 compute nodes (including constraints SKU's)
 

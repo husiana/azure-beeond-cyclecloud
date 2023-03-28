@@ -18,14 +18,26 @@ fi
 MOUNT_ROOT=/mnt/resource
 mkdir $MOUNT_ROOT
 
-# Configure mdraid on NVMe SSD's on HBv3 :
-if [[ -e /dev/nvme0n1 ]];
-then # Setup RAID0 on HBv3 NVMe disks:
-        mdadm --create --verbose /dev/md0 --level=stripe --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1
-        mkfs.ext4 /dev/md0
-        umount $MOUNT_ROOT
-        mount /dev/md0 $MOUNT_ROOT
-        chmod 777 -R $MOUNT_ROOT
+VMSIZE=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2018-10-01" | jq -r '.compute.vmSize')
+if [[ $VMSIZE =~ "Standard_HB120.*rs_v3" ]]; then
+        # Configure mdraid on NVMe SSD's on HBv3 :
+        if [[ -e /dev/nvme0n1 ]];
+        then # Setup RAID0 on HBv3 NVMe disks:
+                mdadm --create --verbose /dev/md0 --level=stripe --raid-devices=2 /dev/nvme0n1 /dev/nvme1n1
+                mkfs.ext4 /dev/md0
+                umount $MOUNT_ROOT
+                mount /dev/md0 $MOUNT_ROOT
+                chmod 777 -R $MOUNT_ROOT
+        fi
+else
+        if [[ -e /dev/nvme0n1 ]]; then
+                mkfs.ext4 /dev/nvme0n1
+                umount $MOUNT_ROOT
+                mount /dev/nvme0n1 $MOUNT_ROOT
+                chmod 777 -R $MOUNT_ROOT
+        else
+                echo "no NVMe found, best of luck"
+        fi
 fi
 
 #Install Beeond packages :
