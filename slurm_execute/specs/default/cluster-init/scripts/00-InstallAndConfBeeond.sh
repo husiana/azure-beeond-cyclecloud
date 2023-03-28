@@ -28,7 +28,6 @@ then # Setup RAID0 on HBv3 NVMe disks:
         chmod 777 -R $MOUNT_ROOT
 fi
 
-
 #Install Beeond packages :
 rpm --import https://www.beegfs.io/release/beegfs_7.2.6/gpg/GPG-KEY-beegfs
 wget -O /etc/yum.repos.d/beegfs_rhel8.repo https://www.beegfs.io/release/beegfs_7.2.6/dists/beegfs-rhel8.repo
@@ -37,8 +36,10 @@ yum install -y psmisc libbeegfs-ib beeond pdsh
 sed -i 's/^buildArgs=-j8/buildArgs=-j8 OFED_INCLUDE_PATH=\/usr\/src\/ofa_kernel\/default\/include/g' /etc/beegfs/beegfs-client-autobuild.conf
 sed -i 's/^#include <asm\/kmap_types.h>//g' /opt/beegfs/src/client/client_module_7/source/os/OsCompat.h
 /etc/init.d/beegfs-client rebuild || exit 1
+# Local folder used on every compute node to start beeond
 mkdir $MOUNT_ROOT/beeond
 chmod 777 $MOUNT_ROOT/beeond
+# Beeond mount point
 mkdir /beeond
 chmod 777 /beeond
 ## This is to set rights to your nfsoblob storage space, my mount point is hpcpersistent :
@@ -50,7 +51,6 @@ sed -i 's/^PermitRootLogin no/PermitRootLogin without-password/g' /etc/ssh/sshd_
 sed -i 's/^#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
 rm -f /root/.ssh/known_hosts
 systemctl restart sshd
-
 
 # Disabling selinux
 setenforce 0
