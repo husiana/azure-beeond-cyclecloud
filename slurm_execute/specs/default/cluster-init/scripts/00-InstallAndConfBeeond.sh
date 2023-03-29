@@ -19,7 +19,7 @@ MOUNT_ROOT=/mnt/resource
 mkdir $MOUNT_ROOT
 
 VMSIZE=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2018-10-01" | jq -r '.compute.vmSize')
-if [[ $VMSIZE =~ "Standard_HB120.*rs_v3" ]]; then
+if [[ $VMSIZE =~ "rs_v3" ]]; then
         # Configure mdraid on NVMe SSD's on HBv3 :
         if [[ -e /dev/nvme0n1 ]];
         then # Setup RAID0 on HBv3 NVMe disks:
