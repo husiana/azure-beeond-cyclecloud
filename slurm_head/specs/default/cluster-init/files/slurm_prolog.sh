@@ -35,7 +35,7 @@ if [ $(/opt/cycle/jetpack/bin/jetpack config slurm.hpc) == "True" ]; then
   cat /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   chown $SLURM_JOB_USER:$SLURM_JOB_USER /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   chmod 644 /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
-  nodescnt=$(wc -l /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID | cut -d " " -f 1)
+  nodecnt=$(wc -l /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID | cut -d " " -f 1)
 
   echo "Node cnt = "$nodecnt
 
@@ -46,7 +46,7 @@ if [ $(/opt/cycle/jetpack/bin/jetpack config slurm.hpc) == "True" ]; then
     /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
   else
     echo "Single node so not starting beeond but please use local /mnt/resource dir for scratch"
-    ln -s /mnt/resource/beeond /beeond
+    ln -s /mnt/resource /beeond
   fi
 
 else
