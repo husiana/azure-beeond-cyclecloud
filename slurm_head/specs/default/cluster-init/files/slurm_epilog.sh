@@ -34,11 +34,10 @@ if [ "$(/opt/cycle/jetpack/bin/jetpack config slurm.hpc)" == "True" ]; then
     echo "Is beeond Still mounted ?"
     mount | grep -i bee
     echo
-
-    rm $nodefile
-    echo "ok done"
   else
     echo "Single node job, so unlinking /beeond directory"
     unlink /beeond
   fi
+  rm $nodefile
+  echo "ok done"
 fi
