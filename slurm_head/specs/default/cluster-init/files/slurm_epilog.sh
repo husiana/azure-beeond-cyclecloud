@@ -18,8 +18,8 @@ if [ "$(/opt/cycle/jetpack/bin/jetpack config slurm.hpc)" == "True" ]; then
   nodefile=/shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   nodecnt=$(wc -l $nodefile | cut -f 1 -d " ")
 
-  echo $nodefile
-  if [ -e $nodefile && $nodecnt -gt 1] ; then
+  echo $nodefile" "$nodecnt
+  if [[ -e $nodefile && $nodecnt -gt 1 ]] ; then
     echo "$(date).... Stopping beeond"
     while read host; do
       echo /usr/bin/beeond stop -b /usr/bin/pdsh -n $nodefile -L -d -P -c
