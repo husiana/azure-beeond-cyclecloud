@@ -35,12 +35,12 @@ if [ $(/opt/cycle/jetpack/bin/jetpack config slurm.hpc) == "True" ]; then
   cat /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   chown $SLURM_JOB_USER:$SLURM_JOB_USER /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
   chmod 644 /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID
-  nodescnt=$(wc -l /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID)
+  nodescnt=$(wc -l /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID | cut -d " " -f 1)
 
   echo "Node cnt = "$nodecnt
 
   # Start Beeond as root
-  if [ $nodecnt > 1 ]; then
+  if [ $nodecnt -gt 1 ]; then
     echo "Now starting beeond ... "
     echo /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
     /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
