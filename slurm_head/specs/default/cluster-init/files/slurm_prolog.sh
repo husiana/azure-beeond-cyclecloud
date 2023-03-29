@@ -42,8 +42,8 @@ if [ $(/opt/cycle/jetpack/bin/jetpack config slurm.hpc) == "True" ]; then
   # Start Beeond as root
   if [ $nodecnt -gt 1 ]; then
     echo "Now starting beeond ... "
-    echo /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
-    /usr/bin/beeond start -P -b /usr/bin/pdsh -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
+    echo /usr/bin/beeond start -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
+    /usr/bin/beeond start -n /shared/home/$SLURM_JOB_USER/nodefile-$SLURM_JOB_ID  -d /mnt/resource/beeond -c /beeond
   else
     echo "Single node so not starting beeond but please use local /mnt/resource dir for scratch"
     ln -s /mnt/resource /beeond

@@ -22,8 +22,8 @@ if [ "$(/opt/cycle/jetpack/bin/jetpack config slurm.hpc)" == "True" ]; then
   if [[ -e $nodefile && $nodecnt -gt 1 ]] ; then
     echo "$(date).... Stopping beeond"
     while read host; do
-      echo /usr/bin/beeond stop -b /usr/bin/pdsh -n $nodefile -L -d -P -c
-      /usr/bin/beeond stop -b /usr/bin/pdsh -n $nodefile -L -d -P -c
+      echo /usr/bin/beeond stop -n $nodefile -L -d -c
+      /usr/bin/beeond stop -n $nodefile -L -d -c
       break
     done < $nodefile
 
