@@ -1,4 +1,4 @@
- d#!/bin/bash
+#!/bin/bash
 ## Code inspired by azhpc : https://github.com/Azure/azurehpc/blob/master/apps/ior/build_ior.sh
 
 APP_NAME=ior
@@ -15,24 +15,7 @@ INSTALL_DIR=${SHARED_APP}/${APP_NAME}-${IOR_VERSION}
 
 source /etc/profile.d/modules.sh # so we can load modules
 module load gcc-9.2.1
-
-AZHPC_VMSIZE=$(curl -s -H Metadata:true "http://169.254.169.254/metadata/instance?api-version=2018-10-01" | jq -r '.compute.vmSize')
-export AZHPC_VMSIZE=${AZHPC_VMSIZE,,}
-echo "Running on $AZHPC_VMSIZE"
-if [ "$AZHPC_VMSIZE" = "" ]; then
-    echo "unable to retrieve VM Size - Exiting"
-    exit 1
-fi
-
-case "$AZHPC_VMSIZE" in
-    standard_hb120rs_v2 | standard_hb120rs_v3)
-        module load mpi/hpcx
-        ;;
-    *)
-        sudo yum install -y mpich-3.2-devel
-        module load mpi/mpich-3.2-x86_64
-        ;;
-esac
+module load mpi/hpcx
 
 module list
 function create_modulefile {
@@ -56,7 +39,6 @@ rm $IOR_PACKAGE
 cd ior-$IOR_VERSION
 
 CC=`which mpicc`
-echo ./configure --prefix=${INSTALL_DIR} >> /sched/outputiorconf.log
 ./configure --prefix=${INSTALL_DIR}
 
 make -j ${PARALLEL_BUILD}
