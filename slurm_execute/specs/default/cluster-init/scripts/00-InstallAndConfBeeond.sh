@@ -58,6 +58,7 @@ chmod 777 /beeond
 #chmod 777 /hpcpersistent
 
 # trick, we need key pairs as we run as root the prolog & beeond needs to start as root.
+## HEre be careful with AzureUser
 /usr/bin/cp -fr /shared/home/azureuser/.ssh /root/
 sed -i 's/^PermitRootLogin no/PermitRootLogin without-password/g' /etc/ssh/sshd_config
 sed -i 's/^#PubkeyAuthentication yes/PubkeyAuthentication yes/g' /etc/ssh/sshd_config
