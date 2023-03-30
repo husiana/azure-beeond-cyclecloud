@@ -56,7 +56,7 @@ rm $IOR_PACKAGE
 cd ior-$IOR_VERSION
 
 CC=`which mpicc`
-./configure --prefix=${INSTALL_DIR}
+./configure --prefix=$INSTALL_DIR
 make -j ${PARALLEL_BUILD}
 make install
 
