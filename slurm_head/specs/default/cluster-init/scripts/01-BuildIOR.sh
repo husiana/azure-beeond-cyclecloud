@@ -1,4 +1,4 @@
-#!/bin/bash
+ d#!/bin/bash
 ## Code inspired by azhpc : https://github.com/Azure/azurehpc/blob/master/apps/ior/build_ior.sh
 
 APP_NAME=ior
@@ -56,7 +56,9 @@ rm $IOR_PACKAGE
 cd ior-$IOR_VERSION
 
 CC=`which mpicc`
-./configure --prefix=$INSTALL_DIR
+echo ./configure --prefix=${INSTALL_DIR} >> /sched/outputiorconf.log
+./configure --prefix=${INSTALL_DIR}
+
 make -j ${PARALLEL_BUILD}
 make install
 
