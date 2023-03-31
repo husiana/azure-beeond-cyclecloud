@@ -2,7 +2,10 @@
 ### Code from MS TechCommunity https://techcommunity.microsoft.com/t5/azure-compute-blog/automate-beeond-filesystem-on-azure-cyclecloud-slurm-cluster/ba-p/3625544
 
 # Copy Prolog & Epilog from / to the right location:
-cp /mnt/cluster-init/slurm_head/default/files/*.sh /sched/
+cp /mnt/cluster-init/slurm_head/default/files/slurm_epilog.sh /sched/
+cp /mnt/cluster-init/slurm_head/default/files/slurm_prolog.sh /sched/
+mkdir /shared/job_scripts
+cp /mnt/cluster-init/slurm_head/default/files/slurm_ior.sh /shared/job_scripts/
 
 # Make the scripts executable
 chmod +x /sched/slurm_*.sh
